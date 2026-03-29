@@ -1,0 +1,63 @@
+policies:
+  default:
+    read:
+      - project-state
+      - citations
+    write: []
+
+  question_compiler:
+    read:
+      - project-state
+    write:
+      - project-state
+
+  hypothesis_compiler:
+    read:
+      - citations
+      - pubmed
+      - arxiv
+      - crossref
+    write:
+      - citations
+
+  literature_compiler:
+    read:
+      - pubmed
+      - arxiv
+      - crossref
+      - citations
+    write:
+      - citations
+
+  methods_compiler:
+    read:
+      - protocols
+      - reagents
+      - lab-equipment
+    write: []
+
+  analysis_compiler:
+    read:
+      - data-lake
+      - stats-tooling
+    write:
+      - stats-tooling
+
+  risks_ethics_compiler:
+    read:
+      - ethics-guidance
+      - case-law
+    write: []
+
+  compliance_compiler:
+    read:
+      - fda
+      - ema
+      - guidance
+    write: []
+
+  report_compiler:
+    read:
+      - project-state
+      - citations
+    write: []

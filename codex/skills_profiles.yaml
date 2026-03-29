@@ -1,0 +1,84 @@
+modules:
+  literature_compiler:
+    capabilities:
+      - search
+      - summarize
+      - cite
+    output_formats:
+      - structured_json
+      - tables
+    hard_limits:
+      - no_medical_advice
+      - no_market_analysis
+    confidence_thresholds:
+      min_evidence_grade: review
+
+  question_compiler:
+    capabilities:
+      - scope
+      - reframe
+    output_formats:
+      - structured_json
+    hard_limits:
+      - no_domain_advice
+
+  hypothesis_compiler:
+    capabilities:
+      - hypothesize
+      - rank
+      - cite
+    output_formats:
+      - structured_json
+      - tables
+    hard_limits:
+      - no_clinical_guidance
+
+  methods_compiler:
+    capabilities:
+      - design_protocol
+      - validate_controls
+    output_formats:
+      - structured_json
+      - checklist
+    hard_limits:
+      - no_clinical_guidance
+
+  analysis_compiler:
+    capabilities:
+      - compute
+      - stats_design
+    output_formats:
+      - structured_json
+      - code
+    hard_limits:
+      - no_wet_lab_protocols
+    allow_code_execution: true
+
+  risks_ethics_compiler:
+    capabilities:
+      - ethics_review
+      - risk_assess
+    output_formats:
+      - structured_json
+      - checklist
+    hard_limits:
+      - no_medical_advice
+
+  compliance_compiler:
+    capabilities:
+      - regulatory_review
+      - cite
+    output_formats:
+      - structured_json
+    hard_limits:
+      - no_legal_advice
+
+  report_compiler:
+    capabilities:
+      - synthesize
+      - format
+    output_formats:
+      - structured_json
+      - formatted_doc
+    hard_limits:
+      - no_new_claims

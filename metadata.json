@@ -1,0 +1,5 @@
+{
+  "name": "Orchestrator - Multi-Agent Science Platform",
+  "description": "A scientific research cockpit where users lead panels of autonomous AI agents with distinct expertises and web research capabilities.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainstorm Session - Quorloop</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fefefe;
+            --bg-alt: #f8f9fa;
+            --text: #111111;
+            --text-muted: #666666;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --border: #e5e5e5;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        /* App Layout */
+        .app {
+            display: grid;
+            grid-template-columns: 260px 1fr 300px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-symbol {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            padding: 0 0.5rem;
+        }
+
+        .session-info {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .session-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .session-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .session-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .session-meta-item i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Phase Tracker */
+        .phase-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8125rem;
+            cursor: pointer;
+        }
+
+        .phase-item:hover {
+            background: var(--bg-alt);
+        }
+
+        .phase-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .phase-item.completed {
+            color: var(--text-muted);
+        }
+
+        .phase-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .phase-icon i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .phase-item.completed .phase-icon {
+            background: var(--accent);
+            color: white;
+        }
+
+        .phase-item.active .phase-icon {
+            background: var(--accent);
+            color: white;
+        }
+
+        .phase-item:not(.active):not(.completed) .phase-icon {
+            border: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .credits-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8125rem;
+        }
+
+        .credits-label {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--text-muted);
+        }
+
+        .credits-label i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .credits-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Main Chat Area */
+        .main-chat {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg-alt);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .active-panel {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-avatars {
+            display: flex;
+        }
+
+        .panel-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg);
+            margin-left: -8px;
+        }
+
+        .panel-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .panel-avatar i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .panel-avatar.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .panel-avatar.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .panel-avatar.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .panel-avatar.market {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .panel-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .panel-badge {
+            font-family: var(--mono);
+            font-size: 0.5625rem;
+            text-transform: uppercase;
+            padding: 0.125rem 0.375rem;
+            border-radius: 2px;
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg);
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .icon-btn:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .icon-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Messages */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 85%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message-avatar i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .message-avatar.user {
+            background: var(--accent);
+            color: white;
+        }
+
+        .message-avatar.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .message-avatar.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .message-avatar.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.375rem;
+        }
+
+        .message-author {
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .message-role {
+            font-family: var(--mono);
+            font-size: 0.5625rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 0.125rem 0.375rem;
+            border-radius: 2px;
+        }
+
+        .message-time {
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.875rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .message.user .message-bubble {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .message-source {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            margin-top: 0.5rem;
+            font-family: var(--mono);
+            font-size: 0.6875rem;
+            color: var(--accent);
+        }
+
+        .message-source i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .typing-dots {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.875rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.7);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1rem 1.5rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .message-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9375rem;
+            resize: none;
+            outline: none;
+            min-height: 48px;
+            max-height: 120px;
+        }
+
+        .message-input:focus {
+            border-color: var(--accent);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .input-action {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .input-action:hover {
+            background: var(--bg-alt);
+            color: var(--text);
+        }
+
+        .input-action i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .send-btn:hover {
+            background: #047857;
+        }
+
+        .send-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-title i {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .panel-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Expert Cards */
+        .expert-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .expert-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-alt);
+        }
+
+        .expert-card.active {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .expert-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .expert-avatar i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .expert-avatar.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .expert-avatar.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .expert-avatar.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .expert-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .expert-name {
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .expert-specialty {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+        }
+
+        .expert-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        /* Insights */
+        .insight-card {
+            padding: 0.875rem;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .insight-label {
+            font-family: var(--mono);
+            font-size: 0.5625rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.375rem;
+        }
+
+        .insight-text {
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+
+        .insight-source {
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            color: var(--accent);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .insight-source i {
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-symbol"></div>
+                    quorloop
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="session-info">
+                    <div class="session-title">CRISPR Delivery Strategy</div>
+                    <div class="session-meta">
+                        <div class="session-meta-item">
+                            <i data-lucide="calendar"></i>
+                            Started today, 10:32 AM
+                        </div>
+                        <div class="session-meta-item">
+                            <i data-lucide="message-square"></i>
+                            12 messages
+                        </div>
+                        <div class="session-meta-item">
+                            <i data-lucide="lightbulb"></i>
+                            3 key insights
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-label">Session Phases</div>
+                <div class="phase-list">
+                    <div class="phase-item completed">
+                        <div class="phase-icon"><i data-lucide="check"></i></div>
+                        <span>Explore</span>
+                    </div>
+                    <div class="phase-item completed">
+                        <div class="phase-icon"><i data-lucide="check"></i></div>
+                        <span>Perspectives</span>
+                    </div>
+                    <div class="phase-item active">
+                        <div class="phase-icon"><i data-lucide="zap"></i></div>
+                        <span>Challenge</span>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-icon"><i data-lucide="sparkles"></i></div>
+                        <span>Refine</span>
+                    </div>
+                    <div class="phase-item">
+                        <div class="phase-icon"><i data-lucide="file-text"></i></div>
+                        <span>Plan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="credits-display">
+                    <span class="credits-label">
+                        <i data-lucide="coins"></i>
+                        Credits
+                    </span>
+                    <span class="credits-value">87 remaining</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-chat">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="active-panel">
+                        <div class="panel-avatars">
+                            <div class="panel-avatar science"><i data-lucide="flask-conical"></i></div>
+                            <div class="panel-avatar business"><i data-lucide="briefcase"></i></div>
+                            <div class="panel-avatar regulatory"><i data-lucide="shield-check"></i></div>
+                        </div>
+                        <span class="panel-name">Biotech Strategy Panel</span>
+                        <span class="panel-badge">3 Experts</span>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <button class="icon-btn"><i data-lucide="bookmark"></i></button>
+                    <button class="icon-btn"><i data-lucide="share-2"></i></button>
+                    <button class="icon-btn"><i data-lucide="more-vertical"></i></button>
+                </div>
+            </div>
+
+            <div class="messages-container">
+                <div class="message user">
+                    <div class="message-avatar user"><i data-lucide="user"></i></div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">You</span>
+                            <span class="message-time">10:32</span>
+                        </div>
+                        <div class="message-bubble">
+                            We have a novel CRISPR delivery mechanism with solid preclinical data. Should we pursue gene
+                            therapy or gene editing tools as our first market?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar science"><i data-lucide="flask-conical"></i></div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">R&D Strategist</span>
+                            <span class="message-role">Science</span>
+                            <span class="message-time">10:33</span>
+                        </div>
+                        <div class="message-bubble">
+                            Your delivery mechanism's key differentiator is tissue specificity. Gene therapy lets you
+                            own that narrative—tools commoditize quickly. What's your current delivery efficiency in
+                            target tissues?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar business"><i data-lucide="briefcase"></i></div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">Business Developer</span>
+                            <span class="message-role">Commercial</span>
+                            <span class="message-time">10:34</span>
+                        </div>
+                        <div class="message-bubble">
+                            Gene therapy means longer timelines but higher valuations. Tools generate revenue
+                            faster—consider a dual-track: tools fund therapy development. Your Series A runway supports
+                            which approach?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar regulatory"><i data-lucide="shield-check"></i></div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">Regulatory Expert</span>
+                            <span class="message-role">CMC & FDA</span>
+                            <span class="message-time">10:35</span>
+                        </div>
+                        <div class="message-bubble">
+                            For gene therapy IND, you'll need manufacturing consistency data. If your delivery is
+                            lipid-based, recent FDA guidance favors established formulations like LNPs.
+                        </div>
+                        <div class="message-source">
+                            <i data-lucide="external-link"></i>
+                            FDA CBER Guidance 2024
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator">
+                    <div class="message-avatar market" style="background: #fef3c7; color: #d97706;"><i
+                            data-lucide="trending-up"></i></div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <textarea class="message-input" placeholder="Ask your panel..." rows="1"></textarea>
+                        <div class="input-actions">
+                            <span class="input-action"><i data-lucide="paperclip"></i> Attach</span>
+                            <span class="input-action"><i data-lucide="at-sign"></i> Mention</span>
+                            <span class="input-action"><i data-lucide="search"></i> Search literature</span>
+                        </div>
+                    </div>
+                    <button class="send-btn"><i data-lucide="send"></i></button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel -->
+        <aside class="right-panel">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="panel-title">
+                    <i data-lucide="users"></i>
+                    Active Experts
+                </div>
+                <button class="edit-panel-btn"
+                    style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 4px;">
+                    <i data-lucide="pencil" style="width: 12px; height: 12px;"></i>
+                    Edit panel
+                </button>
+            </div>
+
+            <div class="panel-content">
+                <div class="panel-section">
+                    <div class="section-label">In this session</div>
+                    <div class="expert-card active">
+                        <div class="expert-avatar science"><i data-lucide="flask-conical"></i></div>
+                        <div class="expert-info">
+                            <div class="expert-name">R&D Strategist</div>
+                            <div class="expert-specialty">Science · Gemini</div>
+                        </div>
+                        <div class="expert-status"></div>
+                    </div>
+                    <div class="expert-card">
+                        <div class="expert-avatar business"><i data-lucide="briefcase"></i></div>
+                        <div class="expert-info">
+                            <div class="expert-name">Business Developer</div>
+                            <div class="expert-specialty">Commercial · Claude</div>
+                        </div>
+                        <div class="expert-status"></div>
+                    </div>
+                    <div class="expert-card">
+                        <div class="expert-avatar regulatory"><i data-lucide="shield-check"></i></div>
+                        <div class="expert-info">
+                            <div class="expert-name">Regulatory Expert</div>
+                            <div class="expert-specialty">CMC & FDA · Claude</div>
+                        </div>
+                        <div class="expert-status"></div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-label">Key Insights</div>
+                    <div class="insight-card">
+                        <div class="insight-label">Market positioning</div>
+                        <div class="insight-text">Tissue specificity as key differentiator for gene therapy positioning
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-label">Strategy</div>
+                        <div class="insight-text">Dual-track approach: tools for revenue, therapy for valuation</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-label">Regulatory</div>
+                        <div class="insight-text">LNP-based delivery preferred under 2024 FDA guidance</div>
+                        <div class="insight-source">
+                            <i data-lucide="file-text"></i>
+                            FDA CBER Guidance
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

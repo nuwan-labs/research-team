@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Quorloop</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fefefe;
+            --bg-alt: #f8f9fa;
+            --text: #111111;
+            --text-muted: #666666;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --border: #e5e5e5;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .onboarding-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.125rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .logo-symbol {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .step-dot.active {
+            background: var(--accent);
+        }
+
+        .skip-btn {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .onboarding-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .step-container {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+
+        .step-icon i {
+            width: 40px;
+            height: 40px;
+        }
+
+        .step-title {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-description {
+            font-size: 1.0625rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            margin-bottom: 0.375rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+
+        .role-select {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .role-option {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .role-option:hover {
+            border-color: var(--accent);
+        }
+
+        .role-option.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .role-option-title {
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .role-option-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .onboarding-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: white;
+        }
+
+        .btn:hover {
+            background: #047857;
+        }
+
+        .btn i {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="onboarding-header">
+        <div class="logo">
+            <div class="logo-symbol"></div>quorloop
+        </div>
+        <div class="progress-steps">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+        </div>
+        <span style="width: 80px;"></span>
+    </header>
+
+    <main class="onboarding-content">
+        <div class="step-container">
+            <div class="step-icon"><i data-lucide="sparkles"></i></div>
+            <h1 class="step-title">Welcome to Quorloop</h1>
+            <p class="step-description">Let's set up your workspace. This takes about a minute.</p>
+
+            <div class="form-group">
+                <label class="form-label">What should we call you?</label>
+                <input type="text" class="form-input" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">What's your role?</label>
+            </div>
+            <div class="role-select">
+                <div class="role-option selected">
+                    <div class="role-option-title">Scientist / Researcher</div>
+                    <div class="role-option-desc">Academic or industry R&D</div>
+                </div>
+                <div class="role-option">
+                    <div class="role-option-title">Business / Strategy</div>
+                    <div class="role-option-desc">Commercial, BD, leadership</div>
+                </div>
+                <div class="role-option">
+                    <div class="role-option-title">Data / Computational</div>
+                    <div class="role-option-desc">Bioinformatics, data science</div>
+                </div>
+                <div class="role-option">
+                    <div class="role-option-title">Other</div>
+                    <div class="role-option-desc">Consultant, investor, etc.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="onboarding-footer">
+        <button class="btn">Get started <i data-lucide="arrow-right"></i></button>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.querySelectorAll('.role-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.role-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+
+</html>

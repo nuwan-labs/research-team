@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Quorloop</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fefefe;
+            --bg-alt: #f8f9fa;
+            --text: #111111;
+            --text-muted: #666666;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --border: #e5e5e5;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.125rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .logo-symbol {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid;
+            border-radius: 4px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text);
+        }
+
+        .btn-filled {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .btn-filled:hover {
+            background: #047857;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 3rem 4rem;
+        }
+
+        .pricing-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .pricing-header h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+
+        .pricing-header p {
+            font-size: 1.0625rem;
+            color: var(--text-muted);
+        }
+
+        /* Credit Packs */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+        }
+
+        .pricing-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            background: linear-gradient(180deg, #f0fdf4 0%, var(--bg) 100%);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .credit-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            background: var(--accent-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .credit-icon i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .credit-amount {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.25rem;
+        }
+
+        .credit-label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .price-per-credit {
+            font-family: var(--mono);
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            border: 1px solid;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.15s;
+        }
+
+        .buy-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .buy-btn-outline {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .buy-btn-outline:hover {
+            border-color: var(--text);
+        }
+
+        .buy-btn-filled {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .buy-btn-filled:hover {
+            background: #047857;
+        }
+
+        /* Usage Examples */
+        .usage-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .usage-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .usage-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .usage-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .usage-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.25rem;
+        }
+
+        .usage-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .usage-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .usage-card-icon i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .usage-card-icon.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .usage-card-icon.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .usage-card-icon.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .usage-card-icon.tool {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .usage-card-title {
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .usage-card-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .usage-card-cost {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 0.6875rem;
+        }
+
+        .usage-card-cost span:first-child {
+            color: var(--text-muted);
+        }
+
+        .usage-card-cost span:last-child {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            padding: 0.875rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-note i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <div class="logo-symbol"></div>
+            quorloop
+        </div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#">For Biotech</a></li>
+                <li><a href="#">Use Cases</a></li>
+                <li><a href="#" class="active">Pricing</a></li>
+            </ul>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline">Sign in</button>
+                <button class="btn btn-filled">Start for free</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="pricing-header">
+            <h1>Pay as you go</h1>
+            <p>Buy credits and use them across any expert panel. Different agents and tools consume credits based on
+                actual costs—you only pay for what you use.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="credit-icon">
+                    <i data-lucide="coins"></i>
+                </div>
+                <div class="credit-amount">50</div>
+                <div class="credit-label">Credits</div>
+                <div class="price">$5</div>
+                <div class="price-per-credit">$0.10 per credit</div>
+                <button class="buy-btn buy-btn-outline">
+                    <i data-lucide="credit-card"></i>
+                    Buy credits
+                </button>
+            </div>
+
+            <div class="pricing-card popular">
+                <div class="popular-badge">Most Popular</div>
+                <div class="credit-icon">
+                    <i data-lucide="coins"></i>
+                </div>
+                <div class="credit-amount">120</div>
+                <div class="credit-label">Credits</div>
+                <div class="price">$10</div>
+                <div class="price-per-credit">$0.083 per credit · 17% bonus</div>
+                <button class="buy-btn buy-btn-filled">
+                    <i data-lucide="credit-card"></i>
+                    Buy credits
+                </button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="credit-icon">
+                    <i data-lucide="coins"></i>
+                </div>
+                <div class="credit-amount">280</div>
+                <div class="credit-label">Credits</div>
+                <div class="price">$20</div>
+                <div class="price-per-credit">$0.071 per credit · 29% bonus</div>
+                <button class="buy-btn buy-btn-outline">
+                    <i data-lucide="credit-card"></i>
+                    Buy credits
+                </button>
+            </div>
+        </div>
+
+        <div class="usage-section">
+            <div class="usage-header">
+                <h2>How credits are used</h2>
+                <p>Each agent and tool has a different cost based on the underlying APIs</p>
+            </div>
+
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon science">
+                            <i data-lucide="flask-conical"></i>
+                        </div>
+                        <span class="usage-card-title">R&D Strategist</span>
+                    </div>
+                    <div class="usage-card-desc">Scientific analysis and research strategy</div>
+                    <div class="usage-card-cost">
+                        <span>Per message</span>
+                        <span>~2-4 credits</span>
+                    </div>
+                </div>
+
+                <div class="usage-card">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon business">
+                            <i data-lucide="briefcase"></i>
+                        </div>
+                        <span class="usage-card-title">Business Expert</span>
+                    </div>
+                    <div class="usage-card-desc">Commercial and market insights</div>
+                    <div class="usage-card-cost">
+                        <span>Per message</span>
+                        <span>~2-3 credits</span>
+                    </div>
+                </div>
+
+                <div class="usage-card">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon regulatory">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <span class="usage-card-title">Regulatory Expert</span>
+                    </div>
+                    <div class="usage-card-desc">FDA, CMC, and compliance guidance</div>
+                    <div class="usage-card-cost">
+                        <span>Per message</span>
+                        <span>~3-5 credits</span>
+                    </div>
+                </div>
+
+                <div class="usage-card">
+                    <div class="usage-card-header">
+                        <div class="usage-card-icon tool">
+                            <i data-lucide="database"></i>
+                        </div>
+                        <span class="usage-card-title">Database Lookup</span>
+                    </div>
+                    <div class="usage-card-desc">PubMed, patents, clinical trials</div>
+                    <div class="usage-card-cost">
+                        <span>Per query</span>
+                        <span>~1-2 credits</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-note">
+            <i data-lucide="lock"></i>
+            Secure payments via Stripe
+        </div>
+        <ul class="footer-links">
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

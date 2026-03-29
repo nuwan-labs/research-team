@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quorloop - AI-Powered Research for Life Sciences</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fefefe;
+            --bg-alt: #f0fdf4;
+            --text: #111111;
+            --text-muted: #666666;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --border: #e5e5e5;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.125rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .logo-symbol {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid;
+            border-radius: 4px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text);
+        }
+
+        .btn-filled {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .btn-filled:hover {
+            background: #047857;
+        }
+
+        .btn-large {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        /* Main Content - Single Screen */
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            padding: 3rem 4rem;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Left Side - Value Proposition */
+        .value-prop {
+            max-width: 500px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--mono);
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.375rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1.25rem;
+        }
+
+        .badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .value-prop h1 {
+            font-size: 2.75rem;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.25rem;
+        }
+
+        .value-prop h1 span {
+            color: var(--accent);
+        }
+
+        .value-prop-desc {
+            font-size: 1.0625rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Quick Features */
+        .quick-features {
+            display: flex;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        .feature-text {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        /* Right Side - Chat Preview */
+        .chat-preview {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            height: 100%;
+            max-height: 540px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.875rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dots {
+            display: flex;
+            gap: 0.375rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .chat-title {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .expert-badges {
+            display: flex;
+            gap: 0.375rem;
+        }
+
+        .expert-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg);
+            margin-left: -8px;
+        }
+
+        .expert-badge:first-child {
+            margin-left: 0;
+        }
+
+        .expert-badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .expert-badge.scientist {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .expert-badge.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .expert-badge.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .expert-badge.market {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+
+        /* Message Animation */
+        .message {
+            display: flex;
+            gap: 0.625rem;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: messageAppear 0.5s ease forwards;
+        }
+
+        .message:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .message:nth-child(2) {
+            animation-delay: 0.9s;
+        }
+
+        .message:nth-child(3) {
+            animation-delay: 1.5s;
+        }
+
+        .message:nth-child(4) {
+            animation-delay: 2.1s;
+        }
+
+        @keyframes messageAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message-avatar i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .message-avatar.user {
+            background: var(--accent);
+            color: white;
+        }
+
+        .message-avatar.scientist {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .message-avatar.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .message-avatar.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-author {
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .message-role {
+            font-family: var(--mono);
+            font-size: 0.5625rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 0.125rem 0.375rem;
+            border-radius: 2px;
+        }
+
+        .message-text {
+            font-size: 0.8125rem;
+            background: var(--bg);
+            padding: 0.625rem 0.875rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 0.625rem;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+            animation-delay: 2.6s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .typing-dots {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.625rem 0.875rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.7);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input {
+            padding: 0.875rem 1.25rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent);
+        }
+
+        .send-btn {
+            padding: 0.625rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .send-btn:hover {
+            background: #047857;
+        }
+
+        .send-btn i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 0.875rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .footer-tagline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <div class="logo-symbol"></div>
+            quorloop
+        </div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#">For Biotech</a></li>
+                <li><a href="#">Use Cases</a></li>
+                <li><a href="#">Pricing</a></li>
+            </ul>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline">Sign in</button>
+                <button class="btn btn-filled">Start for free</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="value-prop">
+            <div class="badge">
+                <i data-lucide="dna"></i>
+                Built for Life Sciences
+            </div>
+            <h1>From bench to<br><span>business case</span></h1>
+            <p class="value-prop-desc">
+                Bring scientific rigor to product decisions. Brainstorm with AI experts in R&D, regulatory, and
+                commercialization to build defensible biotech strategies.
+            </p>
+            <div class="cta-group">
+                <button class="btn btn-filled btn-large">Start brainstorming →</button>
+                <button class="btn btn-outline btn-large">See use cases</button>
+            </div>
+            <div class="quick-features">
+                <div class="quick-feature">
+                    <i data-lucide="target" class="feature-icon"></i>
+                    <span class="feature-text">R&D strategy</span>
+                </div>
+                <div class="quick-feature">
+                    <i data-lucide="clipboard-check" class="feature-icon"></i>
+                    <span class="feature-text">Regulatory paths</span>
+                </div>
+                <div class="quick-feature">
+                    <i data-lucide="bar-chart-3" class="feature-icon"></i>
+                    <span class="feature-text">Market research</span>
+                </div>
+                <div class="quick-feature">
+                    <i data-lucide="rocket" class="feature-icon"></i>
+                    <span class="feature-text">Go-to-market</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-preview">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <span class="chat-title">strategy session</span>
+                </div>
+                <div class="expert-badges">
+                    <div class="expert-badge scientist"><i data-lucide="flask-conical"></i></div>
+                    <div class="expert-badge business"><i data-lucide="briefcase"></i></div>
+                    <div class="expert-badge regulatory"><i data-lucide="shield-check"></i></div>
+                    <div class="expert-badge market"><i data-lucide="trending-up"></i></div>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <div class="message">
+                    <div class="message-avatar user"><i data-lucide="user"></i></div>
+                    <div class="message-content">
+                        <div class="message-author">You</div>
+                        <div class="message-text">We have a novel CRISPR delivery mechanism with solid preclinical data.
+                            Should we pursue gene therapy or gene editing tools as our first market?</div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar scientist"><i data-lucide="flask-conical"></i></div>
+                    <div class="message-content">
+                        <div class="message-author">
+                            R&D Strategist
+                            <span class="message-role">Science</span>
+                        </div>
+                        <div class="message-text">Your delivery mechanism's key differentiator is tissue specificity.
+                            Gene therapy lets you own that narrative—tools commoditize quickly.</div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar business"><i data-lucide="briefcase"></i></div>
+                    <div class="message-content">
+                        <div class="message-author">
+                            Business Developer
+                            <span class="message-role">Commercial</span>
+                        </div>
+                        <div class="message-text">Gene therapy means longer timelines but higher valuations. Tools
+                            generate revenue faster—consider a dual-track: tools fund therapy development.</div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar regulatory"><i data-lucide="shield-check"></i></div>
+                    <div class="message-content">
+                        <div class="message-author">
+                            Regulatory Expert
+                            <span class="message-role">CMC & FDA</span>
+                        </div>
+                        <div class="message-text">For gene therapy IND, you'll need manufacturing consistency data. If
+                            your delivery is lipid-based, recent FDA guidance favors established formulations.</div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator">
+                    <div class="message-avatar" style="background: #fef3c7; color: #d97706;"><i
+                            data-lucide="trending-up"></i></div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" class="input-field" placeholder="Share your biotech challenge...">
+                <button class="send-btn">
+                    <i data-lucide="send"></i>
+                    Send
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span class="footer-tagline">where science meets strategy</span>
+        <ul class="footer-links">
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

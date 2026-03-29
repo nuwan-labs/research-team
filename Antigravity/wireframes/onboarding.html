@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - Quorloop</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fefefe;
+            --bg-alt: #f8f9fa;
+            --text: #111111;
+            --text-muted: #666666;
+            --accent: #059669;
+            --accent-light: #d1fae5;
+            --border: #e5e5e5;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mono {
+            font-family: var(--mono);
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        /* Header */
+        .onboarding-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.125rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .logo-symbol {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .logo-symbol::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--text);
+            border-radius: 50%;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .step-dot.active {
+            background: var(--accent);
+        }
+
+        .step-dot.completed {
+            background: var(--accent);
+        }
+
+        .skip-btn {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .skip-btn:hover {
+            color: var(--text);
+        }
+
+        /* Main Content */
+        .onboarding-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .step-container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step-icon i {
+            width: 32px;
+            height: 32px;
+        }
+
+        .step-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-description {
+            font-size: 1.0625rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Selection Cards */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .selection-card {
+            padding: 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--bg);
+        }
+
+        .selection-card:hover {
+            border-color: var(--accent);
+        }
+
+        .selection-card.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .selection-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .selection-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selection-card-icon i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .selection-card-icon.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .selection-card-icon.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .selection-card-icon.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .selection-card-icon.data {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .selection-card-icon.discovery {
+            background: #f3e8ff;
+            color: #9333ea;
+        }
+
+        .selection-card-icon.clinical {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .selection-card-title {
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .selection-card-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .selection-check {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selection-card.selected .selection-check {
+            display: flex;
+        }
+
+        .selection-card {
+            position: relative;
+        }
+
+        .selection-check i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Expert Preview */
+        .expert-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .expert-preview-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-alt);
+        }
+
+        .expert-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .expert-avatar i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .expert-avatar.science {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .expert-avatar.business {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .expert-avatar.regulatory {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .expert-avatar.data {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .expert-info {
+            flex: 1;
+        }
+
+        .expert-name {
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .expert-specialty {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .expert-tier {
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .expert-tier.free {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .expert-tier.premium {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        /* API Key Section */
+        .api-key-section {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .api-key-card {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-alt);
+        }
+
+        .api-key-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .api-key-title {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .api-key-title i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .api-key-badge {
+            font-family: var(--mono);
+            font-size: 0.625rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--accent-light);
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .api-key-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .api-key-input {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .api-key-input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: var(--mono);
+            font-size: 0.875rem;
+            outline: none;
+        }
+
+        .api-key-input input:focus {
+            border-color: var(--accent);
+        }
+
+        .api-key-input button {
+            padding: 0.75rem 1.25rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .api-key-input button:hover {
+            border-color: var(--text);
+        }
+
+        .skip-api-key {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .skip-api-key a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Footer Actions */
+        .onboarding-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.15s;
+        }
+
+        .btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .btn-back:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .btn-next {
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #047857;
+        }
+
+        .step-counter {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="onboarding-header">
+        <div class="logo">
+            <div class="logo-symbol"></div>
+            quorloop
+        </div>
+        <div class="progress-steps">
+            <div class="step-dot completed"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+        </div>
+        <a class="skip-btn">Skip for now</a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="onboarding-content">
+        <div class="step-container">
+            <div class="step-icon">
+                <i data-lucide="target"></i>
+            </div>
+            <h1 class="step-title">What's your focus?</h1>
+            <p class="step-description">
+                Select your areas of work. We'll customize your expert panels and suggestions based on your needs.
+            </p>
+
+            <div class="selection-grid">
+                <div class="selection-card selected">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon science"><i data-lucide="flask-conical"></i></div>
+                        <span class="selection-card-title">R&D / Discovery</span>
+                    </div>
+                    <p class="selection-card-desc">Research planning, experimental design, scientific strategy</p>
+                </div>
+
+                <div class="selection-card">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon regulatory"><i data-lucide="shield-check"></i></div>
+                        <span class="selection-card-title">Regulatory</span>
+                    </div>
+                    <p class="selection-card-desc">FDA/EMA pathways, CMC, clinical trial design</p>
+                </div>
+
+                <div class="selection-card selected">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon business"><i data-lucide="briefcase"></i></div>
+                        <span class="selection-card-title">Business / Commercial</span>
+                    </div>
+                    <p class="selection-card-desc">Market analysis, go-to-market, fundraising strategy</p>
+                </div>
+
+                <div class="selection-card">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon data"><i data-lucide="bar-chart-3"></i></div>
+                        <span class="selection-card-title">Data / Bioinformatics</span>
+                    </div>
+                    <p class="selection-card-desc">NGS analysis, pipeline design, computational biology</p>
+                </div>
+
+                <div class="selection-card">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon discovery"><i data-lucide="pill"></i></div>
+                        <span class="selection-card-title">Drug Discovery</span>
+                    </div>
+                    <p class="selection-card-desc">Target validation, lead optimization, preclinical</p>
+                </div>
+
+                <div class="selection-card">
+                    <div class="selection-check"><i data-lucide="check"></i></div>
+                    <div class="selection-card-header">
+                        <div class="selection-card-icon clinical"><i data-lucide="heart-pulse"></i></div>
+                        <span class="selection-card-title">Clinical Development</span>
+                    </div>
+                    <p class="selection-card-desc">Trial design, patient recruitment, endpoints</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="onboarding-footer">
+        <button class="btn btn-back">
+            <i data-lucide="arrow-left"></i>
+            Back
+        </button>
+        <span class="step-counter">Step 2 of 4</span>
+        <button class="btn btn-next">
+            Continue
+            <i data-lucide="arrow-right"></i>
+        </button>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Toggle selection
+        document.querySelectorAll('.selection-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+    </script>
+</body>
+
+</html>
