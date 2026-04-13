@@ -2,6 +2,14 @@
 
 A React/TypeScript web application where you lead a panel of AI agents with distinct scientific expertises to collaboratively design and evaluate research projects. Built on the Gemini API with live web search and code execution.
 
+## Screenshots
+
+![Agent panel discussion with CRISPR delivery strategy](screenshots/research-1.png)
+*Multi-agent panel in action — R&D Strategist, Business Developer, and Regulatory Expert collaborating on a CRISPR delivery strategy*
+
+![Focus area onboarding screen](screenshots/research-2.png)
+*Onboarding flow for selecting research focus (R&D/Discovery, Regulatory, Business, Bioinformatics, Drug Discovery, Clinical Development)*
+
 ## Overview
 
 The Orchestrator simulates a multidisciplinary research team. You direct the conversation; agents respond from within their domain, delegate tasks to each other, and collectively track progress through structured research phases — from Brainstorm through to Conclusion.
